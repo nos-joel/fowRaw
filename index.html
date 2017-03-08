@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <link rel="stylesheet" type="text/css" href="App.css">
+    <script src="https://unpkg.com/react@15.4.2/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15.4.2/dist/react-dom.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+    class Container extends React.Component {
+      constructor(props){
+        super(props);
+        this.state = {
+          data:[]
+        };
+      }
+      componentWillMount() {
+        $.getJSON("https://raw.githubusercontent.com/nos-joel/fow/master/wheelers.json",
+          (fetched_data) => {
+            this.setState({ data: fetched_data.wheelers });
+            console.log(this.state.data)
+          }
+        );
+      }
+      render() {
+        let entries = this.state.data.map((el) =>
+          <Card key={el.key} url={el.imgurl} menu={el.menu} location={el.location}
+            name={el.name} status={el.status}
+          />
+        );
+        return (
+          <div>
+            <div className="App">
+              <div className="App-header">
+
+                <h2 className="App-intro">Food On Wheels PR</h2>
+              </div>
+            </div>
+
+            <div className="ctrl-wrap">
+              <div className="ctrl">All</div>
+              <div className="ctrl">Metro</div>
+              <div className="ctrl">Norte</div>
+              <div className="ctrl">Sur</div>
+              <div className="ctrl">Este</div>
+              <div className="ctrl">Oeste</div>
+            </div>
+              {entries}
+          </div>
+        );
+      }
+    }
+
+    class Card extends React.Component {
+
+      render () {
+        return (
+          <div className="container">
+            <div className="card-info">
+              <div className="content">
+                <h1 className="fname">{this.props.name}</h1>
+              </div>
+              <div className="menu">
+                <p><u>{this.props.menu[0]}</u></p>
+                <p><u>{this.props.menu[1]}</u></p>
+                <p><u>{this.props.menu[2]}</u></p>
+              </div>
+
+            </div>
+            <div className="status">
+              <p>{this.props.status}</p>
+            </div>
+            <div className="ci-footer">Ahora en {this.props.location}</div>
+          <img className="image" alt="asd"
+          src={this.props.url}></img>
+
+          </div>
+        );
+      }
+    }
+      ReactDOM.render(
+        <Container />,
+        document.getElementById('root')
+      );
+
+    </script>
+  </body>
+</html>
